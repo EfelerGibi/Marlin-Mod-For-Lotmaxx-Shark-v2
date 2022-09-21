@@ -37,6 +37,9 @@ namespace ExtUI {
 
   void onStartup() {
     dgusdisplay.InitDisplay();
+    #if ENABLED(DGUS_LCD_UI_LOTMAXX)
+      ScreenHandler.init();
+    #endif
     ScreenHandler.UpdateScreenVPData();
   }
 
@@ -56,7 +59,7 @@ namespace ExtUI {
   void onPrintTimerStarted() {}
   void onPrintTimerPaused() {}
   void onPrintTimerStopped() {}
-  void onFilamentRunout(const extruder_t extruder) {}
+  void onFilamentRunout(const extruder_t extruder) {ScreenHandler.filamentRunout();}
 
   void onUserConfirmRequired(const char * const msg) {
     if (msg) {
@@ -72,8 +75,8 @@ namespace ExtUI {
 
   void onStatusChanged(const char * const msg) { ScreenHandler.setstatusmessage(msg); }
 
-  void onHomingStart() {}
-  void onHomingDone() {}
+  void onHomingStart() { ScreenHandler.GotoScreen(LOTMAXXLCD_SCREEN_HOMING);}
+  void onHomingDone() { ScreenHandler.PopToOldScreen();}
   void onPrintDone() {}
 
   void onFactoryReset() {}
@@ -129,6 +132,9 @@ namespace ExtUI {
     void onPowerLossResume() {
       // Called on resume from power-loss
       IF_DISABLED(DGUS_LCD_UI_MKS, ScreenHandler.GotoScreen(DGUSLCD_SCREEN_POWER_LOSS));
+      #if ENABLED(DGUS_LCD_UI_LOTMAXX)
+        injectCommands(F("M1000"));
+      #endif
     }
   #endif
 

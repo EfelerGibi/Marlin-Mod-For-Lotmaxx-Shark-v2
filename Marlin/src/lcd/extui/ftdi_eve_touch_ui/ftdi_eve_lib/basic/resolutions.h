@@ -97,7 +97,7 @@
 
 #elif defined(TOUCH_UI_800x480)
   namespace FTDI {
-    #ifdef TOUCH_UI_800x480_GENERIC
+    #if defined(TOUCH_UI_800x480_GENERIC)
       constexpr uint8_t Pclk                 =    2;
       constexpr uint16_t Hsize               =  800;
       constexpr uint16_t Vsize               =  480;

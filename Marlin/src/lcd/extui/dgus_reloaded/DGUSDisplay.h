@@ -21,10 +21,7 @@
  */
 #pragma once
 
-/**
- * DGUS implementation written by coldtobi in 2019.
- * Updated for STM32G0B1RE by Protomosh in 2022.
- */
+/* DGUS implementation written by coldtobi in 2019 for Marlin */
 
 #include "config/DGUS_Screen.h"
 #include "config/DGUS_Control.h"
@@ -33,13 +30,11 @@
 #include "../../../inc/MarlinConfigPre.h"
 #include "../../../MarlinCore.h"
 
-#define DEBUG_DGUSLCD // Uncomment for debug messages
 #define DEBUG_OUT ENABLED(DEBUG_DGUSLCD)
 #include "../../../core/debug_out.h"
 
-// New endianness swap for 32bit mcu (tested with STM32G0B1RE)
-#define BE16_P(V) ( ((uint8_t*)(V))[0] << 8U | ((uint8_t*)(V))[1] )
-#define BE32_P(V) ( ((uint8_t*)(V))[0] << 24U | ((uint8_t*)(V))[1] << 16U | ((uint8_t*)(V))[2] << 8U | ((uint8_t*)(V))[3] )
+#define Swap16(val) ((uint16_t)(((uint16_t)(val) >> 8) |\
+                                ((uint16_t)(val) << 8)))
 
 // Low-Level access to the display.
 class DGUSDisplay {

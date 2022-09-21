@@ -10,7 +10,7 @@
  *
  *******************************************************************************
  */
-#ifdef STM32H743xx
+#if defined(STM32H743xx)
 #include "pins_arduino.h"
 
 // Digital PinName array

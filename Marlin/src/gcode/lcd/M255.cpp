@@ -32,11 +32,12 @@
  */
 void GcodeSuite::M255() {
   if (parser.seenval('S')) {
-    const int m = parser.value_int();
     #if HAS_DISPLAY_SLEEP
-      ui.sleep_timeout_minutes = constrain(m, ui.sleep_timeout_min, ui.sleep_timeout_max);
+      const int m = parser.value_int();
+      ui.sleep_timeout_minutes = constrain(m, SLEEP_TIMEOUT_MIN, SLEEP_TIMEOUT_MAX);
     #else
-      ui.backlight_timeout_minutes = constrain(m, ui.backlight_timeout_min, ui.backlight_timeout_max);
+      const unsigned int s = parser.value_ushort() * 60;
+      ui.lcd_backlight_timeout = constrain(s, LCD_BKL_TIMEOUT_MIN, LCD_BKL_TIMEOUT_MAX);
     #endif
   }
   else
@@ -46,8 +47,11 @@ void GcodeSuite::M255() {
 void GcodeSuite::M255_report(const bool forReplay/*=true*/) {
   report_heading_etc(forReplay, F(STR_DISPLAY_SLEEP));
   SERIAL_ECHOLNPGM("  M255 S",
-    TERN(HAS_DISPLAY_SLEEP, ui.sleep_timeout_minutes, ui.backlight_timeout_minutes),
-    " ; (minutes)"
+    #if HAS_DISPLAY_SLEEP
+      ui.sleep_timeout_minutes, " ; (minutes)"
+    #else
+      ui.lcd_backlight_timeout, " ; (seconds)"
+    #endif
   );
 }
 

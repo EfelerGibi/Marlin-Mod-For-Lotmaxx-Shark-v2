@@ -236,6 +236,10 @@
   #include "lcd/extui/dgus/DGUSScreenHandler.h"
 #endif
 
+#if ENABLED(DGUS_LCD_UI_LOTMAXX)
+  #include "lcd/extui/dgus/DGUSScreenHandler.h"
+#endif
+
 #if HAS_DRIVER_SAFE_POWER_PROTECT
   #include "feature/stepper_driver_safety.h"
 #endif
@@ -385,6 +389,7 @@ void startOrResumeJob() {
       marlin_state = MF_RUNNING;          // Signal to stop trying
       TERN_(PASSWORD_AFTER_SD_PRINT_END, password.lock_machine());
       TERN_(DGUS_LCD_UI_MKS, ScreenHandler.SDPrintingFinished());
+      TERN_(DGUS_LCD_UI_LOTMAXX, ScreenHandler.SDCardPrintFinished());
     }
   }
 
@@ -488,7 +493,7 @@ inline void manage_inactivity(const bool no_stepper_sleep=false) {
     }
   #endif
 
-  #if ENABLED(FREEZE_FEATURE)
+  #if HAS_FREEZE_PIN
     stepper.frozen = READ(FREEZE_PIN) == FREEZE_STATE;
   #endif
 
@@ -1323,6 +1328,10 @@ void setup() {
       SETUP_LOG("SAFE_POWER");
       OUT_WRITE(SAFE_POWER_PIN, HIGH);
     #endif
+  #endif
+
+  #if ENABLED(DGUS_LCD_UI_LOTMAXX) && PIN_EXISTS(DGUS_POWER)  //  DGUS(DWIN) power on
+    OUT_WRITE(DGUS_POWER_PIN, HIGH);
   #endif
 
   #if BOTH(SDSUPPORT, SDCARD_EEPROM_EMULATION)

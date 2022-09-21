@@ -40,7 +40,7 @@
   #include "../../../feature/powerloss.h"
 #endif
 
-DGUSScreenHandlerClass ScreenHandler;
+DGUSScreenHandler ScreenHandler;
 
 uint16_t DGUSScreenHandler::ConfirmVP;
 
@@ -55,7 +55,7 @@ void (*DGUSScreenHandler::confirm_action_cb)() = nullptr;
 #if ENABLED(SDSUPPORT)
   int16_t DGUSScreenHandler::top_file = 0,
           DGUSScreenHandler::file_to_print = 0;
-  ExtUI::FileList filelist;
+  ExtUI::FileList DGUSScreenHandler::filelist;
 #endif
 
 #if ENABLED(DGUS_FILAMENT_LOADUNLOAD)
@@ -152,10 +152,10 @@ void DGUSScreenHandler::DGUSLCD_SendPrintTimeToDisplay(DGUS_VP_Variable &var) {
 // Send an uint8_t between 0 and 100 to a variable scale to 0..255
 void DGUSScreenHandler::DGUSLCD_PercentageToUint8(DGUS_VP_Variable &var, void *val_ptr) {
   if (var.memadr) {
-    const uint16_t value = BE16_P(val_ptr);
-    DEBUG_ECHOLNPGM("Got percent:", value);
+    uint16_t value = swap16(*(uint16_t*)val_ptr);
+    DEBUG_ECHOLNPGM("FAN value get:", value);
     *(uint8_t*)var.memadr = map(constrain(value, 0, 100), 0, 100, 0, 255);
-    DEBUG_ECHOLNPGM("Set uint8:", *(uint8_t*)var.memadr);
+    DEBUG_ECHOLNPGM("FAN value change:", *(uint8_t*)var.memadr);
   }
 }
 
@@ -164,7 +164,11 @@ void DGUSScreenHandler::DGUSLCD_PercentageToUint8(DGUS_VP_Variable &var, void *v
 // overwrite the remainings with spaces.// var.size has the display buffer size!
 void DGUSScreenHandler::DGUSLCD_SendStringToDisplay(DGUS_VP_Variable &var) {
   char *tmp = (char*) var.memadr;
+#if ENABLED(DGUS_LCD_UI_LOTMAXX)
+  DGUSLCD_TextDisplay(var.VP, tmp, var.size);
+#else
   dgusdisplay.WriteVariable(var.VP, tmp, var.size, true);
+#endif
 }
 
 // Sends a (flash located) string to the DGUS Display
@@ -172,7 +176,11 @@ void DGUSScreenHandler::DGUSLCD_SendStringToDisplay(DGUS_VP_Variable &var) {
 // overwrite the remainings with spaces.// var.size has the display buffer size!
 void DGUSScreenHandler::DGUSLCD_SendStringToDisplayPGM(DGUS_VP_Variable &var) {
   char *tmp = (char*) var.memadr;
+#if ENABLED(DGUS_LCD_UI_LOTMAXX)
+  DGUSLCD_TextDisplayPGM(var.VP, tmp, var.size);
+#else
   dgusdisplay.WriteVariablePGM(var.VP, tmp, var.size, true);
+#endif
 }
 
 #if HAS_PID_HEATING
@@ -264,10 +272,10 @@ void DGUSScreenHandler::DGUSLCD_SendHeaterStatusToDisplay(DGUS_VP_Variable &var)
     static uint16_t period = 0;
     static uint16_t index = 0;
     //DEBUG_ECHOPGM(" DGUSLCD_SendWaitingStatusToDisplay ", var.VP);
-    //DEBUG_ECHOLNPGM(" data ", BE16_P(&index));
+    //DEBUG_ECHOLNPGM(" data ", swap16(index));
     if (period++ > DGUS_UI_WAITING_STATUS_PERIOD) {
       dgusdisplay.WriteVariable(var.VP, index);
-      //DEBUG_ECHOLNPGM(" data ", BE16_P(&index));
+      //DEBUG_ECHOLNPGM(" data ", swap16(index));
       if (++index >= DGUS_UI_WAITING_STATUS) index = 0;
       period = 0;
     }
@@ -306,7 +314,7 @@ void DGUSScreenHandler::DGUSLCD_SendHeaterStatusToDisplay(DGUS_VP_Variable &var)
 
   void DGUSScreenHandler::DGUSLCD_SD_ScrollFilelist(DGUS_VP_Variable& var, void *val_ptr) {
     auto old_top = top_file;
-    const int16_t scroll = (int16_t)BE16_P(val_ptr);
+    const int16_t scroll = (int16_t)swap16(*(uint16_t*)val_ptr);
     if (scroll) {
       top_file += scroll;
       DEBUG_ECHOPGM("new topfile calculated:", top_file);
@@ -391,7 +399,7 @@ void DGUSScreenHandler::HandleAllHeatersOff(DGUS_VP_Variable &var, void *val_ptr
 }
 
 void DGUSScreenHandler::HandleTemperatureChanged(DGUS_VP_Variable &var, void *val_ptr) {
-  celsius_t newvalue = BE16_P(val_ptr);
+  celsius_t newvalue = swap16(*(uint16_t*)val_ptr);
   celsius_t acceptedvalue;
 
   switch (var.VP) {
@@ -426,7 +434,7 @@ void DGUSScreenHandler::HandleTemperatureChanged(DGUS_VP_Variable &var, void *va
 
 void DGUSScreenHandler::HandleFlowRateChanged(DGUS_VP_Variable &var, void *val_ptr) {
   #if HAS_EXTRUDERS
-    const uint16_t newvalue = BE16_P(val_ptr);
+    uint16_t newvalue = swap16(*(uint16_t*)val_ptr);
     uint8_t target_extruder;
     switch (var.VP) {
       default: return;
@@ -446,7 +454,7 @@ void DGUSScreenHandler::HandleFlowRateChanged(DGUS_VP_Variable &var, void *val_p
 void DGUSScreenHandler::HandleManualExtrude(DGUS_VP_Variable &var, void *val_ptr) {
   DEBUG_ECHOLNPGM("HandleManualExtrude");
 
-  const int16_t movevalue = BE16_P(val_ptr);
+  int16_t movevalue = swap16(*(uint16_t*)val_ptr);
   float target = movevalue * 0.01f;
   ExtUI::extruder_t target_extruder;
 
@@ -468,19 +476,19 @@ void DGUSScreenHandler::HandleManualExtrude(DGUS_VP_Variable &var, void *val_ptr
 #if ENABLED(DGUS_UI_MOVE_DIS_OPTION)
   void DGUSScreenHandler::HandleManualMoveOption(DGUS_VP_Variable &var, void *val_ptr) {
     DEBUG_ECHOLNPGM("HandleManualMoveOption");
-    *(uint16_t*)var.memadr = BE16_P(val_ptr);
+    *(uint16_t*)var.memadr = swap16(*(uint16_t*)val_ptr);
   }
 #endif
 
 void DGUSScreenHandler::HandleMotorLockUnlock(DGUS_VP_Variable &var, void *val_ptr) {
   DEBUG_ECHOLNPGM("HandleMotorLockUnlock");
-  const int16_t lock = BE16_P(val_ptr);
+  const int16_t lock = swap16(*(uint16_t*)val_ptr);
   queue.enqueue_one_now(lock ? F("M18") : F("M17"));
 }
 
 void DGUSScreenHandler::HandleSettings(DGUS_VP_Variable &var, void *val_ptr) {
   DEBUG_ECHOLNPGM("HandleSettings");
-  const uint16_t value = BE16_P(val_ptr);
+  uint16_t value = swap16(*(uint16_t*)val_ptr);
   switch (value) {
     default: break;
     case 1:
@@ -494,9 +502,11 @@ void DGUSScreenHandler::HandleSettings(DGUS_VP_Variable &var, void *val_ptr) {
 }
 
 void DGUSScreenHandler::HandleStepPerMMChanged(DGUS_VP_Variable &var, void *val_ptr) {
-  const uint16_t value_raw = BE16_P(val_ptr);
-  DEBUG_ECHOLNPGM("HandleStepPerMMChanged:", value_raw);
-  const float value = (float)value_raw / 10;
+  DEBUG_ECHOLNPGM("HandleStepPerMMChanged");
+
+  uint16_t value_raw = swap16(*(uint16_t*)val_ptr);
+  DEBUG_ECHOLNPGM("value_raw:", value_raw);
+  float value = (float)value_raw / 10;
   ExtUI::axis_t axis;
   switch (var.VP) {
     case VP_X_STEP_PER_MM: axis = ExtUI::axis_t::X; break;
@@ -508,12 +518,15 @@ void DGUSScreenHandler::HandleStepPerMMChanged(DGUS_VP_Variable &var, void *val_
   ExtUI::setAxisSteps_per_mm(value, axis);
   DEBUG_ECHOLNPGM("value_set:", ExtUI::getAxisSteps_per_mm(axis));
   skipVP = var.VP; // don't overwrite value the next update time as the display might autoincrement in parallel
+  return;
 }
 
 void DGUSScreenHandler::HandleStepPerMMExtruderChanged(DGUS_VP_Variable &var, void *val_ptr) {
-  const uint16_t value_raw = BE16_P(val_ptr);
-  DEBUG_ECHOLNPGM("HandleStepPerMMExtruderChanged:", value_raw);
-  const float value = (float)value_raw / 10;
+  DEBUG_ECHOLNPGM("HandleStepPerMMExtruderChanged");
+
+  uint16_t value_raw = swap16(*(uint16_t*)val_ptr);
+  DEBUG_ECHOLNPGM("value_raw:", value_raw);
+  float value = (float)value_raw / 10;
   ExtUI::extruder_t extruder;
   switch (var.VP) {
     default: return;
@@ -570,7 +583,7 @@ void DGUSScreenHandler::HandleStepPerMMExtruderChanged(DGUS_VP_Variable &var, vo
   void DGUSScreenHandler::HandleProbeOffsetZChanged(DGUS_VP_Variable &var, void *val_ptr) {
     DEBUG_ECHOLNPGM("HandleProbeOffsetZChanged");
 
-    const float offset = float(int16_t(BE16_P(val_ptr))) / 100.0f;
+    const float offset = float(int16_t(swap16(*(uint16_t*)val_ptr))) / 100.0f;
     ExtUI::setZOffset_mm(offset);
     skipVP = var.VP; // don't overwrite value the next update time as the display might autoincrement in parallel
     return;
@@ -616,7 +629,7 @@ void DGUSScreenHandler::HandleHeaterControl(DGUS_VP_Variable &var, void *val_ptr
   void DGUSScreenHandler::HandlePreheat(DGUS_VP_Variable &var, void *val_ptr) {
     DEBUG_ECHOLNPGM("HandlePreheat");
 
-    const uint16_t preheat_option = BE16_P(val_ptr);
+    const uint16_t preheat_option = swap16(*(uint16_t*)val_ptr);
     switch (preheat_option) {
       default:
       switch (var.VP) {
@@ -639,7 +652,7 @@ void DGUSScreenHandler::HandleHeaterControl(DGUS_VP_Variable &var, void *val_ptr
 #if ENABLED(POWER_LOSS_RECOVERY)
 
   void DGUSScreenHandler::HandlePowerLossRecovery(DGUS_VP_Variable &var, void *val_ptr) {
-    uint16_t value = BE16_P(val_ptr);
+    uint16_t value = swap16(*(uint16_t*)val_ptr);
     if (value) {
       queue.inject(F("M1000"));
       dgusdisplay.WriteVariable(VP_SD_Print_Filename, filelist.filename(), 32, true);

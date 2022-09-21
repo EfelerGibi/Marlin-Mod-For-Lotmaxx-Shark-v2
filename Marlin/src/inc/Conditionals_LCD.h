@@ -373,7 +373,6 @@
 
   #define LCD_I2C_TYPE_PCF8575    // I2C Character-based 12864 display
   #define LCD_I2C_ADDRESS 0x27    // I2C Address of the port expander
-  #define IS_ULTIPANEL 1
 
   #if ENABLED(LCD_SAINSMART_I2C_2004)
     #define LCD_WIDTH 20
@@ -461,7 +460,7 @@
 #endif
 
 // Aliases for LCD features
-#if ANY(DGUS_LCD_UI_ORIGIN, DGUS_LCD_UI_FYSETC, DGUS_LCD_UI_HIPRECY, DGUS_LCD_UI_MKS)
+#if ANY(DGUS_LCD_UI_ORIGIN, DGUS_LCD_UI_FYSETC, DGUS_LCD_UI_HIPRECY, DGUS_LCD_UI_MKS, DGUS_LCD_UI_LOTMAXX)
   #define HAS_DGUS_LCD_CLASSIC 1
 #endif
 
@@ -1599,7 +1598,7 @@
 
 // This emulated DOGM has 'touch/xpt2046', not 'tft/xpt2046'
 #if ENABLED(TOUCH_SCREEN)
-  #if TOUCH_IDLE_SLEEP_MINS
+  #if TOUCH_IDLE_SLEEP
     #define HAS_TOUCH_SLEEP 1
   #endif
   #if NONE(TFT_TOUCH_DEVICE_GT911, TFT_TOUCH_DEVICE_XPT2046)

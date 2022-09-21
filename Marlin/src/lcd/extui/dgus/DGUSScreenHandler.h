@@ -42,10 +42,6 @@
 
 #endif
 
-// endianness swap
-#define BE16_P(V) ( ((uint8_t*)(V))[0] << 8U | ((uint8_t*)(V))[1] )
-#define BE32_P(V) ( ((uint8_t*)(V))[0] << 24U | ((uint8_t*)(V))[1] << 16U | ((uint8_t*)(V))[2] << 8U | ((uint8_t*)(V))[3] )
-
 #if ENABLED(DGUS_LCD_UI_ORIGIN)
   #include "origin/DGUSScreenHandler.h"
 #elif ENABLED(DGUS_LCD_UI_MKS)
@@ -54,9 +50,11 @@
   #include "fysetc/DGUSScreenHandler.h"
 #elif ENABLED(DGUS_LCD_UI_HIPRECY)
   #include "hiprecy/DGUSScreenHandler.h"
+#elif ENABLED(DGUS_LCD_UI_LOTMAXX)
+  #include "Lotmaxx/DGUSScreenHandler.h"
 #endif
 
-extern DGUSScreenHandlerClass ScreenHandler;
+extern DGUSScreenHandler ScreenHandler;
 
 // Helper to define a DGUS_VP_Variable for common use-cases.
 #define VPHELPER(VPADR, VPADRVAR, RXFPTR, TXFPTR) { \

@@ -30,7 +30,7 @@
  *
  * Basic settings can be found in Configuration.h
  */
-#define CONFIGURATION_ADV_H_VERSION 02010200
+#define CONFIGURATION_ADV_H_VERSION 02010100
 
 // @section develop
 
@@ -48,7 +48,7 @@
  *  3 = schema.json - The entire configuration schema. (13 = pattern groups)
  *  4 = schema.yml - The entire configuration schema.
  */
-//#define CONFIG_EXPORT 2 // :[1:'JSON', 2:'config.ini', 3:'schema.json', 4:'schema.yml']
+//#define CONFIG_EXPORT   // :[1:'JSON', 2:'config.ini', 3:'schema.json', 4:'schema.yml']
 
 //===========================================================================
 //============================= Thermal Settings ============================
@@ -481,22 +481,18 @@
 // before a min_temp_error is triggered. (Shouldn't be more than 10.)
 //#define MAX_CONSECUTIVE_LOW_TEMPERATURE_ERROR_ALLOWED 0
 
-/**
- * The number of milliseconds a hotend will preheat before starting to check
- * the temperature. This value should NOT be set to the time it takes the
- * hot end to reach the target temperature, but the time it takes to reach
- * the minimum temperature your thermistor can read. The lower the better/safer.
- * This shouldn't need to be more than 30 seconds (30000)
- */
+// The number of milliseconds a hotend will preheat before starting to check
+// the temperature. This value should NOT be set to the time it takes the
+// hot end to reach the target temperature, but the time it takes to reach
+// the minimum temperature your thermistor can read. The lower the better/safer.
+// This shouldn't need to be more than 30 seconds (30000)
 //#define MILLISECONDS_PREHEAT_TIME 0
 
 // @section extruder
 
-/**
- * Extruder runout prevention.
- * If the machine is idle and the temperature over MINTEMP
- * then extrude some filament every couple of SECONDS.
- */
+// Extruder runout prevention.
+// If the machine is idle and the temperature over MINTEMP
+// then extrude some filament every couple of SECONDS.
 //#define EXTRUDER_RUNOUT_PREVENT
 #if ENABLED(EXTRUDER_RUNOUT_PREVENT)
   #define EXTRUDER_RUNOUT_MINTEMP 190
@@ -632,7 +628,7 @@
  * Multiple extruders can be assigned to the same pin in which case
  * the fan will turn on when any selected extruder is above the threshold.
  */
-#define E0_AUTO_FAN_PIN -1
+#define E0_AUTO_FAN_PIN PE9
 #define E1_AUTO_FAN_PIN -1
 #define E2_AUTO_FAN_PIN -1
 #define E3_AUTO_FAN_PIN -1
@@ -642,6 +638,7 @@
 #define E7_AUTO_FAN_PIN -1
 #define CHAMBER_AUTO_FAN_PIN -1
 #define COOLER_AUTO_FAN_PIN -1
+#define COOLER_FAN_PIN -1
 
 #define EXTRUDER_AUTO_FAN_TEMPERATURE 50
 #define EXTRUDER_AUTO_FAN_SPEED 255   // 255 == full speed
@@ -874,7 +871,6 @@
 #define HOMING_BUMP_DIVISOR { 2, 2, 4 }       // Re-Bump Speed Divisor (Divides the Homing Feedrate)
 
 //#define HOMING_BACKOFF_POST_MM { 2, 2, 2 }  // (linear=mm, rotational=°) Backoff from endstops after homing
-//#define XY_COUNTERPART_BACKOFF_MM 0         // (mm) Backoff X after homing Y, and vice-versa
 
 //#define QUICK_HOME                          // If G28 contains XY do a diagonal move first
 //#define HOME_Y_BEFORE_X                     // If G28 contains XY home Y before X
@@ -945,7 +941,7 @@
    *
    * Set the default state here, change with 'M401 S' or UI, use M500 to save, M502 to reset.
    */
-  //#define BLTOUCH_HS_MODE true
+  #define BLTOUCH_HS_MODE true
 
   // Safety: Enable voltage mode settings in the LCD menu.
   //#define BLTOUCH_LCD_VOLTAGE_MENU
@@ -1020,11 +1016,11 @@
 //
 // Add the G35 command to read bed corners to help adjust screws. Requires a bed probe.
 //
-//#define ASSISTED_TRAMMING
+#define ASSISTED_TRAMMING
 #if ENABLED(ASSISTED_TRAMMING)
 
   // Define positions for probe points.
-  #define TRAMMING_POINT_XY { {  20, 20 }, { 180,  20 }, { 180, 180 }, { 20, 180 } }
+  #define TRAMMING_POINT_XY { {  40, 40 }, { 210,  40 }, { 210, 210 }, { 40, 210 } }
 
   // Define position names for probe points.
   #define TRAMMING_POINT_NAME_1 "Front-Left"
@@ -1045,7 +1041,7 @@
    *   M4: 40 = Clockwise, 41 = Counter-Clockwise
    *   M5: 50 = Clockwise, 51 = Counter-Clockwise
    */
-  #define TRAMMING_SCREW_THREAD 30
+  #define TRAMMING_SCREW_THREAD 40
 
 #endif
 
@@ -1326,7 +1322,7 @@
 //
 // LCD Backlight Timeout
 //
-//#define LCD_BACKLIGHT_TIMEOUT_MINS 1  // (minutes) Timeout before turning off the backlight
+//#define LCD_BACKLIGHT_TIMEOUT 30 // (s) Timeout before turning off the backlight
 
 #if HAS_BED_PROBE && EITHER(HAS_MARLINUI_MENU, HAS_TFT_LVGL_UI)
   //#define PROBE_OFFSET_WIZARD       // Add a Probe Z Offset calibration option to the LCD menu
@@ -1516,11 +1512,11 @@
    * an option on the LCD screen to continue the print from the last-known
    * point in the file.
    */
-  //#define POWER_LOSS_RECOVERY
+  #define POWER_LOSS_RECOVERY
   #if ENABLED(POWER_LOSS_RECOVERY)
-    #define PLR_ENABLED_DEFAULT   false // Power Loss Recovery enabled by default. (Set with 'M413 Sn' & M500)
+    #define PLR_ENABLED_DEFAULT   true  // Power Loss Recovery enabled by default. (Set with 'M413 Sn' & M500)
     //#define BACKUP_POWER_SUPPLY       // Backup power / UPS to move the steppers on power loss
-    //#define POWER_LOSS_ZRAISE       2 // (mm) Z axis raise on resume (on power loss with UPS)
+    #define POWER_LOSS_ZRAISE         5 // (mm) Z axis raise on resume (on power loss with UPS)
     //#define POWER_LOSS_PIN         44 // Pin to detect power loss. Set to -1 to disable default pin on boards without module.
     //#define POWER_LOSS_STATE     HIGH // State of pin indicating power loss
     //#define POWER_LOSS_PULLUP         // Set pullup / pulldown as appropriate for your sensor
@@ -1533,9 +1529,9 @@
     #define POWER_LOSS_MIN_Z_CHANGE 0.05 // (mm) Minimum Z change before saving power-loss data
 
     // Enable if Z homing is needed for proper recovery. 99.9% of the time this should be disabled!
-    //#define POWER_LOSS_RECOVER_ZHOME
+    #define POWER_LOSS_RECOVER_ZHOME
     #if ENABLED(POWER_LOSS_RECOVER_ZHOME)
-      //#define POWER_LOSS_ZHOME_POS { 0, 0 } // Safe XY position to home Z while avoiding objects on the bed
+      #define POWER_LOSS_ZHOME_POS { 0, 0 } // Safe XY position to home Z while avoiding objects on the bed
     #endif
   #endif
 
@@ -1583,7 +1579,6 @@
 
   //#define LONG_FILENAME_HOST_SUPPORT    // Get the long filename of a file/folder with 'M33 <dosname>' and list long filenames with 'M20 L'
   //#define LONG_FILENAME_WRITE_SUPPORT   // Create / delete files with long filenames via M28, M30, and Binary Transfer Protocol
-  //#define M20_TIMESTAMP_SUPPORT         // Include timestamps by adding the 'T' flag to M20 commands
 
   //#define SCROLL_LONG_FILENAMES         // Scroll long filenames in the SD card menu
 
@@ -1745,7 +1740,7 @@
    * Adds the menu item Configuration > LCD Timeout (m) to set a wait period
    * from 0 (disabled) to 99 minutes.
    */
-  //#define DISPLAY_SLEEP_MINUTES 2  // (minutes) Timeout before turning off the screen. Set with M255 S.
+  //#define DISPLAY_SLEEP_MINUTES 2  // (minutes) Timeout before turning off the screen
 
   /**
    * ST7920-based LCDs can emulate a 16 x 4 character display using
@@ -1813,6 +1808,7 @@
 // Additional options for DGUS / DWIN displays
 //
 #if HAS_DGUS_LCD
+  #define LCD_SERIAL_PORT 6
   #define LCD_BAUDRATE 115200
 
   #define DGUS_RX_BUFFER_SIZE 128
@@ -2015,7 +2011,7 @@
  *
  * Warning: Does not respect endstops!
  */
-//#define BABYSTEPPING
+#define BABYSTEPPING
 #if ENABLED(BABYSTEPPING)
   //#define INTEGRATED_BABYSTEPPING         // EXPERIMENTAL integration of babystepping into the Stepper ISR
   //#define BABYSTEP_WITHOUT_HOMING
@@ -2062,14 +2058,13 @@
  *
  * See https://marlinfw.org/docs/features/lin_advance.html for full instructions.
  */
-//#define LIN_ADVANCE
+#define LIN_ADVANCE
 #if ENABLED(LIN_ADVANCE)
-  //#define EXTRA_LIN_ADVANCE_K // Add a second linear advance constant, configurable with M900.
-  #define LIN_ADVANCE_K 0.22    // Unit: mm compression per 1mm/s extruder speed
-  //#define LA_DEBUG            // Print debug information to serial during operation. Disable for production use.
-  //#define EXPERIMENTAL_SCURVE // Allow S-Curve Acceleration to be used with LA.
+  //#define EXTRA_LIN_ADVANCE_K // Enable for second linear advance constants
+  #define LIN_ADVANCE_K 0.66   // Unit: mm compression per 1mm/s extruder speed
+  //#define LA_DEBUG            // If enabled, this will generate debug information output over USB.
+  //#define EXPERIMENTAL_SCURVE // Enable this option to permit S-Curve Acceleration
   //#define ALLOW_LOW_EJERK     // Allow a DEFAULT_EJERK value of <10. Recommended for direct drive hotends.
-  //#define EXPERIMENTAL_I2S_LA // Allow I2S_STEPPER_STREAM to be used with LA. Performance degrades as the LA step rate reaches ~20kHz.
 #endif
 
 // @section leveling
@@ -2246,7 +2241,7 @@
 #endif
 
 // G5 Bézier Curve Support with XYZE destination and IJPQ offsets
-//#define BEZIER_CURVE_SUPPORT        // Requires ~2666 bytes
+#define BEZIER_CURVE_SUPPORT        // Requires ~2666 bytes
 
 #if EITHER(ARC_SUPPORT, BEZIER_CURVE_SUPPORT)
   //#define CNC_WORKSPACE_PLANES      // Allow G2/G3/G5 to operate in XY, ZX, or YZ planes
@@ -2393,7 +2388,7 @@
  * Currently handles M108, M112, M410, M876
  * NOTE: Not yet implemented for all platforms.
  */
-//#define EMERGENCY_PARSER
+#define EMERGENCY_PARSER
 
 /**
  * Realtime Reporting (requires EMERGENCY_PARSER)
@@ -2527,7 +2522,7 @@
     // Longer prime to clean out a SINGLENOZZLE
     #define TOOLCHANGE_FS_EXTRA_PRIME          0  // (mm) Extra priming length
     #define TOOLCHANGE_FS_PRIME_SPEED    (4.6*60) // (mm/min) Extra priming feedrate
-    #define TOOLCHANGE_FS_WIPE_RETRACT         0  // (mm) Cutting retraction out of park, for less stringing, better wipe, etc. Adjust with LCD or M217 G.
+    #define TOOLCHANGE_FS_WIPE_RETRACT         0  // (mm) Retract before cooling for less stringing, better wipe, etc.
 
     // Cool after prime to reduce stringing
     #define TOOLCHANGE_FS_FAN                 -1  // Fan index or -1 to skip
@@ -2586,7 +2581,7 @@
  *
  * Enable PARK_HEAD_ON_PAUSE to add the G-code M125 Pause and Park.
  */
-//#define ADVANCED_PAUSE_FEATURE
+#define ADVANCED_PAUSE_FEATURE
 #if ENABLED(ADVANCED_PAUSE_FEATURE)
   #define PAUSE_PARK_RETRACT_FEEDRATE         60  // (mm/s) Initial retract feedrate.
   #define PAUSE_PARK_RETRACT_LENGTH            2  // (mm) Initial retract.
@@ -3930,7 +3925,7 @@
  * Host Prompt Support enables Marlin to use the host for user prompts so
  * filament runout and other processes can be managed from the host side.
  */
-//#define HOST_ACTION_COMMANDS
+#define HOST_ACTION_COMMANDS
 #if ENABLED(HOST_ACTION_COMMANDS)
   //#define HOST_PAUSE_M76                // Tell the host to pause in response to M76
   //#define HOST_PROMPT_SUPPORT           // Initiate host prompts to get user feedback
@@ -4149,7 +4144,7 @@
 /**
  * WiFi Support (Espressif ESP32 WiFi)
  */
-//#define WIFISUPPORT         // Marlin embedded WiFi management
+//#define WIFISUPPORT         // Marlin embedded WiFi managenent
 //#define ESP3D_WIFISUPPORT   // ESP3D Library WiFi management (https://github.com/luc-github/ESP3DLib)
 
 #if EITHER(WIFISUPPORT, ESP3D_WIFISUPPORT)
