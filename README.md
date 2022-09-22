@@ -17,19 +17,6 @@ To build Marlin 2.1 you'll need [PlatformIO](https://docs.platformio.org/en/late
 
   [Lotmaxx Shark V2 Beta_M_V1.1 Board](https://lotmaxx.com/)| Shark with the rj45 screen.
   
-## Submitting Patches
-
-Proposed patches should be submitted as a Pull Request against the ([bugfix-2.1.x](https://github.com/MarlinFirmware/Marlin/tree/bugfix-2.1.x)) branch.
-
-- This branch is for fixing bugs and integrating any new features for the duration of the Marlin 2.0.x life-cycle.
-- Follow the [Coding Standards](https://marlinfw.org/docs/development/coding_standards.html) to gain points with the maintainers.
-- Please submit Feature Requests and Bug Reports to the [Issue Queue](https://github.com/MarlinFirmware/Marlin/issues/new/choose). Support resources are also listed there.
-- Whenever you add new features, be sure to add tests to `buildroot/tests` and then run your tests locally, if possible.
-  - It's optional: Running all the tests on Windows might take a long time, and they will run anyway on GitHub.
-  - If you're running the tests on Linux (or on WSL with the code on a Linux volume) the speed is much faster.
-  - You can use `make tests-all-local` or `make tests-single-local TEST_TARGET=...`.
-  - If you prefer Docker you can use `make tests-all-local-docker` or `make tests-all-local-docker TEST_TARGET=...`.
-
 ## Marlin Support
 
 The Issue Queue is reserved for Bug Reports and Feature Requests. To get help with configuration and troubleshooting, please use the following resources:
@@ -46,6 +33,8 @@ The Issue Queue is reserved for Bug Reports and Feature Requests. To get help wi
 Marlin is constantly improving thanks to a huge number of contributors from all over the world bringing their specialties and talents. Huge thanks are due to [all the contributors](https://github.com/MarlinFirmware/Marlin/graphs/contributors) who regularly patch up bugs, help direct traffic, and basically keep Marlin from falling apart. Marlin's continued existence would not be possible without them.
 
 ## Administration
+
+This mod was made by EfelerGibi,
 
 Regular users can open and close their own issues, but only the administrators can do project-related things like add labels, merge changes, set milestones, and kick trolls. The current Marlin admin team consists of:
 
