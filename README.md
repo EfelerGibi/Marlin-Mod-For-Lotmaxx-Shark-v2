@@ -3,8 +3,7 @@
 <p align="center">
     <a href="/LICENSE"><img alt="GPL-V3.0 License" src="https://img.shields.io/github/license/marlinfirmware/marlin.svg"></a>
     
-I didnt like how the Lotmaxx Shark V2 was configured, so i modified the firmware and improved how the printer was configured. 
-    
+I didnt like how the Lotmaxx Shark V2 was configured, so i modified the firmware and improved how the printer was configured. İnput shaping is on the way btw!
 
 Additional documentation can be found at the [Marlin Home Page](https://marlinfw.org/).
 Please test this firmware and let us know if it misbehaves in any way. Volunteers are standing by!
