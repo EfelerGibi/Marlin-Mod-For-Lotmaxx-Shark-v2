@@ -6,7 +6,7 @@
 constexpr float MAX_ZOFFSET = 3.0;
 constexpr float MIN_ZOFFSET = -5.0;
 
-constexpr uint16_t AXISMOVESPEED = 1200;
+constexpr uint16_t AXISMOVESPEED = 600;
 
 enum : char{
   X_AXIS_CHAR = 'X',

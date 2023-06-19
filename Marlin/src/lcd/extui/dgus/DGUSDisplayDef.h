@@ -55,7 +55,5 @@ extern const struct DGUS_VP_Variable ListOfVP[];
 #elif ENABLED(DGUS_LCD_UI_HIPRECY)
   #include "hiprecy/DGUSDisplayDef.h"
 #elif ENABLED(DGUS_LCD_UI_LOTMAXX)
-  #include "Lotmaxx/DGUSDisplayDef.h"
+  #include "lotmaxx/DGUSDisplayDef.h"
 #endif
-
-  

@@ -322,7 +322,6 @@ void PrintJobRecovery::save(const bool force/*=false*/, const float zraise/*=POW
     }
     else
       kill(GET_TEXT_F(MSG_OUTAGE_RECOVERY));
-      
   }
 
 #endif // POWER_LOSS_PIN || DEBUG_POWER_LOSS_RECOVERY

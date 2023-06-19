@@ -1,7 +1,6 @@
 /*
 *Function:
 *Programed by:Ray_DK@163.com
-*Modified by:Efeler_Gibi
 *Complete date:
 *Modified by:
 *Modified date:
@@ -19,16 +18,16 @@ extern "C"{
 
 #define COM_PILE_DATE							__DATE__     
 #define COM_PILE_TIME							__TIME__   
-#define SW_VERSION								"SC-10Shark Gibi Mod" 
-#define CO_TD_INFO								"Shenzhen Senma Utrend Technology Co., Ltd & Efeler_Gibi"
+#define SW_VERSION								"Marlin 2.1.2 Mod By Efeler_Gibi" 
+#define CO_TD_INFO								"Lotmaxx & Efeler_Gibi"
 
 
 #define	SK_NAME									"SKU-60-BASE"
 
 typedef enum
 {
-	Chinese = 0,
-	English,
+	English = 0,
+	Chinese,
 	German,
 	French,
 	Spanish,

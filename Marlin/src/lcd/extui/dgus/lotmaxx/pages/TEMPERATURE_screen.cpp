@@ -56,11 +56,15 @@ void DGUSScreenHandler::TEMPERATURE_ReturnButtonHandler(DGUS_VP_Variable &var, v
 void DGUSScreenHandler::TEMPERATURE_PLAButtonHandler(DGUS_VP_Variable &var, void *val_ptr)
 {
   thermalManager.setTargetHotend(PREHEAT_1_TEMP_HOTEND, HID_E0);
+  thermalManager.setTargetBed(PREHEAT_1_TEMP_BED);
+
 }
 
 void DGUSScreenHandler::TEMPERATURE_ABSButtonHandler(DGUS_VP_Variable &var, void *val_ptr)
 {
   thermalManager.setTargetHotend(PREHEAT_2_TEMP_HOTEND, HID_E0);
+  thermalManager.setTargetBed(PREHEAT_2_TEMP_BED);
+
 }
 
 void DGUSScreenHandler::TEMPERATURE_HotbedButtonHandler(DGUS_VP_Variable &var, void *val_ptr)

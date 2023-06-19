@@ -26,6 +26,7 @@
 
 #include "../DGUSScreenHandler.h"
 
+
 #include "../../../../MarlinCore.h"
 #include "../../../../gcode/queue.h"
 #include "../../../../libs/duration_t.h"
@@ -45,6 +46,8 @@ extern float focusLocation;
 TextDisplay DGUSScreenHandler::text_display;
 
 #if ENABLED(SDSUPPORT)
+  ExtUI::FileList DGUSScreenHandler::filelist;
+
 
   void DGUSScreenHandler::DGUSLCD_SD_FileSelected(DGUS_VP_Variable &var, void *val_ptr) {
     //  DWIN Project filelist button begin with 1(usually arranged as follows: 1, 2, 3, 4, 5, 6)
@@ -473,57 +476,7 @@ void DGUSScreenHandler::set_display_language(void)
 {
 	switch(text_display.language_choice)
 	{
-		case Chinese:
-			text_display.L_Print = (char *)C_Print;
-			text_display.L_Ctol = (char *)C_Ctol;
-			text_display.L_Set = (char *)C_Set;
-			text_display.L_Preheat = (char *)C_Preheat;
-			text_display.L_Move = (char *)C_Move;
-			text_display.L_Extrusion = (char *)C_Extrusion;
-			text_display.L_Fan = (char *)C_Fan;
-			text_display.L_About = (char *)C_About;
-			text_display.L_Language = (char *)C_Language;
-			text_display.L_Status = (char *)C_Status;
-			text_display.L_PrintName = (char *)C_PrintName;
-			text_display.L_Pause = (char *)C_Pause;
-			text_display.L_Pursue = (char *)C_Pursue;
-			text_display.L_Stop = (char *)C_Stop;
-			text_display.L_Tempertuare = (char *)C_Tempertuare;
-			text_display.L_Speed = (char *)C_Speed;
-			text_display.L_PrintCtrl = (char *)C_PrintCtrl;
-			text_display.L_PrintSpeed = (char *)C_PrintSpeed;
-			text_display.L_SDPrint = (char *)C_SDPrint;
-			text_display.L_Back = (char *)C_Back;
-			text_display.L_PrintFinish = (char *)C_PrintFinish;
-			text_display.L_Confirm = (char *)C_Confirm;
-			text_display.L_LaserCtol = (char *)C_LaserCtol;
-			text_display.L_LaserMove = (char *)C_LaserMove;
-			text_display.L_Zero = (char *)C_Zero;
-			text_display.L_Ctrl = (char *)C_Ctol;
-			text_display.L_Cancel = (char *)C_Cancel;
-			text_display.L_filament = (char *)C_Filament;
-			text_display.L_StopPrint = (char *)C_StopPrint;
-			text_display.L_Leveling = (char *)C_Leveling;
-			text_display.L_Adjust = (char *)C_Adjust;
-			text_display.L_Load = (char *)C_Load;
-			text_display.L_Unload = (char *)C_Unload;
-			text_display.L_Fast = (char *)C_Fast;
-			text_display.L_Normal = (char *)C_Normal;
-			text_display.L_Slow = (char *)C_Slow;
-			text_display.L_autoleveling = (char *)C_autoleveling;
-			text_display.L_offset = (char *)C_offset;
-			text_display.L_Continue = (char *)C_Continue;
-			text_display.L_3DPrintModeSelect = (char *)C_3DPrintModeSelect;
-			text_display.L_3dPrintExtruder1 = (char *)C_3dPrintExtruder1;
-			text_display.L_3dPrintExtruder2 = (char *)C_3dPrintExtruder2;
-			text_display.L_3dPrintExtruder12 = (char *)C_3dPrintExtruder12;
-			text_display.L_3dPrintHotEndReady = (char *)C_3dPrintHotEndReady;
-			text_display.L_3dPrintHotEndTemperature = (char *)C_3dPrintHotEndTemperature; 
-			text_display.L_3dPrintHotEndStat1 = (char *)C_3dPrintHotEndStat1; 
-			text_display.L_3dPrintHotEndStat2 = (char *)C_3dPrintHotEndStat2;
-			text_display.L_ZOffset = (char *)C_ZOffset;
-			text_display.L_Homing = (char *)C_Homing;
-			break;
+		
 		case English:
 			text_display.L_Print = (char *)E_Print;
 			text_display.L_Ctol = (char *)E_Ctol;
@@ -574,6 +527,57 @@ void DGUSScreenHandler::set_display_language(void)
 			text_display.L_3dPrintHotEndStat2 = (char *)E_3dPrintHotEndStat2;
 			text_display.L_ZOffset = (char *)E_ZOffset;
 			text_display.L_Homing = (char *)E_Homing;
+			break;
+		case Chinese:
+			text_display.L_Print = (char *)C_Print;
+			text_display.L_Ctol = (char *)C_Ctol;
+			text_display.L_Set = (char *)C_Set;
+			text_display.L_Preheat = (char *)C_Preheat;
+			text_display.L_Move = (char *)C_Move;
+			text_display.L_Extrusion = (char *)C_Extrusion;
+			text_display.L_Fan = (char *)C_Fan;
+			text_display.L_About = (char *)C_About;
+			text_display.L_Language = (char *)C_Language;
+			text_display.L_Status = (char *)C_Status;
+			text_display.L_PrintName = (char *)C_PrintName;
+			text_display.L_Pause = (char *)C_Pause;
+			text_display.L_Pursue = (char *)C_Pursue;
+			text_display.L_Stop = (char *)C_Stop;
+			text_display.L_Tempertuare = (char *)C_Tempertuare;
+			text_display.L_Speed = (char *)C_Speed;
+			text_display.L_PrintCtrl = (char *)C_PrintCtrl;
+			text_display.L_PrintSpeed = (char *)C_PrintSpeed;
+			text_display.L_SDPrint = (char *)C_SDPrint;
+			text_display.L_Back = (char *)C_Back;
+			text_display.L_PrintFinish = (char *)C_PrintFinish;
+			text_display.L_Confirm = (char *)C_Confirm;
+			text_display.L_LaserCtol = (char *)C_LaserCtol;
+			text_display.L_LaserMove = (char *)C_LaserMove;
+			text_display.L_Zero = (char *)C_Zero;
+			text_display.L_Ctrl = (char *)C_Ctol;
+			text_display.L_Cancel = (char *)C_Cancel;
+			text_display.L_filament = (char *)C_Filament;
+			text_display.L_StopPrint = (char *)C_StopPrint;
+			text_display.L_Leveling = (char *)C_Leveling;
+			text_display.L_Adjust = (char *)C_Adjust;
+			text_display.L_Load = (char *)C_Load;
+			text_display.L_Unload = (char *)C_Unload;
+			text_display.L_Fast = (char *)C_Fast;
+			text_display.L_Normal = (char *)C_Normal;
+			text_display.L_Slow = (char *)C_Slow;
+			text_display.L_autoleveling = (char *)C_autoleveling;
+			text_display.L_offset = (char *)C_offset;
+			text_display.L_Continue = (char *)C_Continue;
+			text_display.L_3DPrintModeSelect = (char *)C_3DPrintModeSelect;
+			text_display.L_3dPrintExtruder1 = (char *)C_3dPrintExtruder1;
+			text_display.L_3dPrintExtruder2 = (char *)C_3dPrintExtruder2;
+			text_display.L_3dPrintExtruder12 = (char *)C_3dPrintExtruder12;
+			text_display.L_3dPrintHotEndReady = (char *)C_3dPrintHotEndReady;
+			text_display.L_3dPrintHotEndTemperature = (char *)C_3dPrintHotEndTemperature; 
+			text_display.L_3dPrintHotEndStat1 = (char *)C_3dPrintHotEndStat1; 
+			text_display.L_3dPrintHotEndStat2 = (char *)C_3dPrintHotEndStat2;
+			text_display.L_ZOffset = (char *)C_ZOffset;
+			text_display.L_Homing = (char *)C_Homing;
 			break;
 		case German:
 			text_display.L_Print = (char *)G_Print;
@@ -1321,7 +1325,7 @@ void DGUSScreenHandler::init(){
   text_display.language_choice = Chinese;
 }
 
-void DGUSScreenHandler::SDCardPrintFinished()
+void DGUSScreenHandler::SDPrintingFinished()
 {
 	char filename[FILENAME_LENGTH];
 
@@ -1333,6 +1337,8 @@ void DGUSScreenHandler::SDCardPrintFinished()
 	if(strncmp(filename, "AUTO0.G", FILENAME_LENGTH)){
 		GotoScreen(LOTMAXXLCD_SCREEN_PRINT_COMPLTED);
 	}
+	
+
 }
 
 #endif

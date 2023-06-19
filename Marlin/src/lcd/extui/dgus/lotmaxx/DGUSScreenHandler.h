@@ -144,6 +144,9 @@ public:
     static void SDCardRemoved();
     // Marlin informed us about a bad SD Card.
     static void SDCardError();
+
+    static void SDPrintingFinished();
+
   #endif
 
   // OK Button the Confirm screen.
@@ -468,7 +471,6 @@ public:
   static void SELECT_CancelButtonHandler(DGUS_VP_Variable &var, void *val_ptr);
   static void SELECT_ConfirmButtonHandler(DGUS_VP_Variable &var, void *val_ptr);
 
-  static void SDCardPrintFinished();
 
 private:
   static DGUSLCD_Screens current_screen;  //< currently on screen
@@ -493,7 +495,10 @@ private:
   static prepare_state_t prepare_state;
 };
 
+
 #if ENABLED(POWER_LOSS_RECOVERY)
   #define PLR_SCREEN_RECOVER DGUSLCD_SCREEN_SDPRINTMANIPULATION
   #define PLR_SCREEN_CANCEL DGUSLCD_SCREEN_STATUS
 #endif
+
+typedef DGUSScreenHandler DGUSScreenHandlerClass;
